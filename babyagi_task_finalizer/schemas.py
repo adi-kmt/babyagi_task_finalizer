@@ -1,9 +1,14 @@
+from naptha_sdk.schemas import AgentConfig
 from pydantic import BaseModel, Field
 from typing import List
 
-class InputSchema(BaseModel):
+class TaskExecutorPromptSchema(BaseModel):
     task: str
     objective: str
+
+class InputSchema(BaseModel):
+    tool_name: str
+    tool_input_data: TaskExecutorPromptSchema
 
 class Task(BaseModel):
     """Class for defining a task to be performed."""
@@ -17,3 +22,6 @@ class TaskFinalizer(BaseModel):
     final_report: str = Field("", description="The final report of the tasks.")
     new_tasks: List[Task] = Field([], description="A list of new tasks to be performed.")
     objective_met: bool = Field(False, description="The status of the objective. True if the objective have been met, False otherwise.")
+
+class TaskFinalizerAgentConfig(AgentConfig):
+    user_message_template: str
